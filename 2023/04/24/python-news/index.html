@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>python -辨别真假新闻 | 云间晚晚</title><meta name="author" content="Wanwan"><meta name="copyright" content="Wanwan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="写在前面 最近在写一个微博数据分析的项目，本次博客的记录目的在于帮助回想python机器学习相关知识，这次的辨别真假新闻是大二上学期的一次课设作业(当时我还什么都不会)，写得狠潦草仓促()，但是数据清洗、中文分词这些步骤对我正在做的项目有帮助，准备浅浅回忆一下。 本次实验采用机器学习中的传统方法，用jupyter notebook处理数据，通过文本预处理和提取特征的工程后，用多项式朴素贝叶斯分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python -辨别真假新闻">
+<meta property="og:url" content="https://jerryc.me/2023/04/24/python-news/index.html">
+<meta property="og:site_name" content="云间晚晚">
+<meta property="og:description" content="写在前面 最近在写一个微博数据分析的项目，本次博客的记录目的在于帮助回想python机器学习相关知识，这次的辨别真假新闻是大二上学期的一次课设作业(当时我还什么都不会)，写得狠潦草仓促()，但是数据清洗、中文分词这些步骤对我正在做的项目有帮助，准备浅浅回忆一下。 本次实验采用机器学习中的传统方法，用jupyter notebook处理数据，通过文本预处理和提取特征的工程后，用多项式朴素贝叶斯分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jerryc.me/img/wanwan3.jpg">
+<meta property="article:published_time" content="2023-04-24T09:36:17.000Z">
+<meta property="article:modified_time" content="2023-04-25T06:01:50.525Z">
+<meta property="article:author" content="Wanwan">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jerryc.me/img/wanwan3.jpg"><link rel="shortcut icon" href="/img/yy.png"><link rel="canonical" href="https://jerryc.me/2023/04/24/python-news/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'python -辨别真假新闻',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-04-25 14:01:50'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/wanwan3.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/moon.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="云间晚晚"><span class="site-name">云间晚晚</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">python -辨别真假新闻</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-24T09:36:17.000Z" title="发表于 2023-04-24 17:36:17">2023-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-04-25T06:01:50.525Z" title="更新于 2023-04-25 14:01:50">2023-04-25</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="python -辨别真假新闻"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="写在前面">写在前面</h3>
+<p>最近在写一个微博数据分析的项目，本次博客的记录目的在于帮助回想python机器学习相关知识，这次的辨别真假新闻是大二上学期的一次课设作业(当时我还什么都不会)，写得狠潦草仓促()，但是数据清洗、中文分词这些步骤对我正在做的项目有帮助，准备浅浅回忆一下。</p>
+<p>本次实验采用机器学习中的传统方法，用jupyter notebook处理数据，通过文本预处理和提取特征的工程后，用多项式朴素贝叶斯分类器进行分类，得到各项评价指标，对模型进行评估。</p>
+<h3 id="课设要求">课设要求</h3>
+<ul>
+<li>定义：给定一个信息的标题、出处、相关链接以及相关 评论，尝试判别信息真伪。</li>
+<li>输入：信息来源、标题、相关超链接、评论。</li>
+<li>输出：真伪标签（0: 消息为真，1: 消息为假)。</li>
+</ul>
+<h3 id="文本预处理">文本预处理</h3>
+<h4 id="数据导入">数据导入</h4>
+<p>python三大库第一位选手pandas登场，使用pd加载训练集导入csv文件。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#加载训练集</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#导入两个csv文件</span></span><br><span class="line">train_dataset = pd.read_csv(<span class="string">&#x27;train.csv&#x27;</span>)</span><br><span class="line">test_dataset = pd.read_csv(<span class="string">&#x27;test.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数据集数量： %d&quot;</span>%train_dataset.label.count())</span><br><span class="line">train_dataset.head(<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<p>输出结果：</p>
+<figure>
+<img src="/2023/04/24/python-news/image-20230424225312709.png" alt="image-20230424225312709"><figcaption aria-hidden="true">image-20230424225312709</figcaption>
+</figure>
+<p>从结果可以看出来，csv保存了媒体名、新闻主题、包含的url、图片url、对该新闻的评论以及对新闻的真伪打上标签，（注意0为真新闻，1为假新闻，开始做这个的时候我也很困惑为什么是这样，可能评论和新闻的真伪没有必然联系吧），</p>
+<h4 id="数据清洗">数据清洗</h4>
+<p>数据清洗简单来看是对数据集进行比较简单的整理，例如补全缺失值、删除重复值等等。</p>
+<h5 id="删除重复值">删除重复值</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#对测试集完全相同的数据进行删除</span></span><br><span class="line">train_dataset.drop_duplicates(inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment">#删除含有缺失值的行</span></span><br><span class="line">train_dataset.dropna()</span><br><span class="line">train_dataset.label.count()<span class="comment">#7078</span></span><br></pre></td></tr></table></figure>
+<p>最后得到的结果是7078条，而原始的训练集记录是10587条，说明里面重复的数据还是比较多的。写这部分的时候去CSDN上找了一些资料：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45675449/article/details/115645184">python数据清洗csv文件</a> 感觉非常完整、清晰。</p>
+<h5 id="正则表达式去除中文以外的字符">正则表达式去除中文以外的字符</h5>
+<p>当时只顾着搜集更多、更全的代码美化课设，没有太考虑是否合适的问题，比如这段运用正则表达式去除中文以外的字符的处理，其实这段代码对于实际问题是有一点不合理的，因为英文单词也可以作为真假新闻辨别的一部分，在pre的时候也被助教问到了TAT，但是这段代码稍加修改以后还是能有实际用途的，也算作为一个教训留在这里。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#数据清洗-去除中文以外的字符</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">worddrop</span>(<span class="params">a</span>):</span><br><span class="line">    drop=re.<span class="built_in">compile</span>(<span class="string">&#x27;[^\u4e00-\u9fa5]&#x27;</span>)</span><br><span class="line">    a=drop.sub(<span class="string">&#x27;&#x27;</span>,a)</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line">train.Title=train.Title.apply(worddrop)</span><br><span class="line">train.head()</span><br></pre></td></tr></table></figure>
+<p>处理结果：</p>
+<figure>
+<img src="/2023/04/24/python-news/image-20230425004513977.png" alt="image-20230425004513977"><figcaption aria-hidden="true">image-20230425004513977</figcaption>
+</figure>
+<h4 id="中文分词">中文分词</h4>
+<p>为了提高拟合度，我们需要对进行简单清洗后的数据进行分词，这里采用jieba库。调用jieba.cut()函数，函数接受两个输入参数，第一个是将要分词的对象，第二个是采用的模式，默认为精确模式。返回的结构都是一个可迭代的 generator，可使用 for 循环来获得分词后得到的每一个词语。PS：这里的分词只是学习过程中方便自己观看jieba分词效果，在停用词处理时会重新用到cut函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">wordcut</span>(<span class="params">a</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot; &quot;</span>.join(jieba.cut(a))</span><br><span class="line">train.Title=train.Title.apply(wordcut)</span><br><span class="line">train.head()</span><br></pre></td></tr></table></figure>
+<p>处理结果：</p>
+<figure>
+<img src="/2023/04/24/python-news/image-20230425004732784.png" alt="image-20230425004732784"><figcaption aria-hidden="true">image-20230425004732784</figcaption>
+</figure>
+<p>很明显看出这个处理还是有一些问题的。</p>
+<h4 id="停用词去除">停用词去除</h4>
+<p>准备好的文本里存在很多无用的部分，例如一些连接词、语气词等。它们虽然出现的次数很多，但却与我们需要得到的信息无关，这时需要去除这些停用词。这里采用从github上下载的百度停用词库，来对数据进行进一步的处理。相关代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#导入停用词表</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">stopwordslist</span>(<span class="params">filepath</span>):</span><br><span class="line">    stopwords = [line.strip() <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(filepath, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>).readlines()] </span><br><span class="line">                                                                                               </span><br><span class="line">    <span class="keyword">return</span> stopwords </span><br><span class="line">stopwords = stopwordslist(<span class="string">&#x27;stopword.txt&#x27;</span>)</span><br><span class="line">stopwords[:<span class="number">10</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除停用词</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start=time.clock()</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">del_stopword</span>(<span class="params">a</span>):</span><br><span class="line">    old = jieba.cut(a)</span><br><span class="line">    new = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> old :</span><br><span class="line">        <span class="keyword">if</span> word <span class="keyword">not</span> <span class="keyword">in</span> stopwords: </span><br><span class="line">                new += <span class="string">&quot; &quot;</span> </span><br><span class="line">                new += word </span><br><span class="line">    <span class="keyword">return</span> new</span><br><span class="line">train.Title=train.Title.apply(del_stopword)</span><br><span class="line">end=time.clock()</span><br><span class="line">train.head()</span><br></pre></td></tr></table></figure>
+<p>这个处理得很慢很慢，而且跟停用词库大小挂钩，顺带一提，在实际处理问题的时候，我觉得也可以根据词频的统计结果继续往停用词库中添加词语。</p>
+<h3 id="特征工程tf-idf">特征工程TF-IDF</h3>
+<p>如果只使用词频来衡量重要性，很容易过度强调在文档中经常出现而并没有包含太多与文档有关的信息的词语。如果一个词语经常出现在语料库中，它意味着它并没有携带特定的文档的特殊信息。本 实验用TF-IDF实现对文本特征的提取：</p>
+<p>TF-IDF是一种广泛使用的特征向量化方法，用一个关键词评估在一篇文章或一份文件中的重要程度，关键词的重要性随着关键词出现频率的增加而增加，同时也会随着在语料库中出现的频率成反比下降，体现一个文档中词语在语料库中的重要程度。</p>
+<p><strong>t-词语 d-文档 D-语料库</strong></p>
+<p>TF(t,d)-词频，一个给定词语在该文件中出现的频率，对于在某一特定文件里的词语ti来说，重要性可表示为：</p>
+<p><img src="/2023/04/24/python-news/image-20230425133029149.png" alt="image-20230425133029149" style="zoom:50%;"></p>
+<p>（蚌埠住了，解析有问题，markdown的公式弄过来直接报错了，搞了半个小时也没弄好，先上图片，以后有时间再细补）</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://jerryc.me">Wanwan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://jerryc.me/2023/04/24/python-news/">https://jerryc.me/2023/04/24/python-news/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://jerryc.me" target="_blank">云间晚晚</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="/img/wanwan3.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/24/SQL-hard/" title="SQL -困难题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SQL -困难题</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/23/hello-world/" title="Hello World"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello World</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/04/25/python-2/" title="python -疫情下的女性相关话题讨论"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-25</div><div class="title">python -疫情下的女性相关话题讨论</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/wanwan3.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Wanwan</div><div class="author-info__description">日暮酒杯淡饭，一半一半.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Wanwan0407"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">dy:Wanwan还在睡梦中  不定期更新日常和蛋仔派对,欢迎来访︶ε╰✿  PS:本网站于4.24开始建设，有很多不足，日益完善中//</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">1.</span> <span class="toc-text">写在前面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AF%BE%E8%AE%BE%E8%A6%81%E6%B1%82"><span class="toc-number">2.</span> <span class="toc-text">课设要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E6%9C%AC%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">3.</span> <span class="toc-text">文本预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5"><span class="toc-number">3.1.</span> <span class="toc-text">数据导入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97"><span class="toc-number">3.2.</span> <span class="toc-text">数据清洗</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E5%80%BC"><span class="toc-number">3.2.1.</span> <span class="toc-text">删除重复值</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%8E%BB%E9%99%A4%E4%B8%AD%E6%96%87%E4%BB%A5%E5%A4%96%E7%9A%84%E5%AD%97%E7%AC%A6"><span class="toc-number">3.2.2.</span> <span class="toc-text">正则表达式去除中文以外的字符</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%AD%E6%96%87%E5%88%86%E8%AF%8D"><span class="toc-number">3.3.</span> <span class="toc-text">中文分词</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%81%9C%E7%94%A8%E8%AF%8D%E5%8E%BB%E9%99%A4"><span class="toc-number">3.4.</span> <span class="toc-text">停用词去除</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8Btf-idf"><span class="toc-number">4.</span> <span class="toc-text">特征工程TF-IDF</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/29/C-UDP/" title="C++ -CLIENT-SERVER通信协议">C++ -CLIENT-SERVER通信协议</a><time datetime="2023-05-29T11:21:03.000Z" title="发表于 2023-05-29 19:21:03">2023-05-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/27/SQL-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" title="SQL -窗口函数">SQL -窗口函数</a><time datetime="2023-04-27T11:29:26.000Z" title="发表于 2023-04-27 19:29:26">2023-04-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/25/python-2/" title="python -疫情下的女性相关话题讨论">python -疫情下的女性相关话题讨论</a><time datetime="2023-04-25T11:18:32.000Z" title="发表于 2023-04-25 19:18:32">2023-04-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/SQL-hard/" title="SQL -困难题">SQL -困难题</a><time datetime="2023-04-24T14:16:43.000Z" title="发表于 2023-04-24 22:16:43">2023-04-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/python-news/" title="python -辨别真假新闻">python -辨别真假新闻</a><time datetime="2023-04-24T09:36:17.000Z" title="发表于 2023-04-24 17:36:17">2023-04-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Wanwan</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这个底部蓝色背景图怎么改啊有没有人帮帮我QAQ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

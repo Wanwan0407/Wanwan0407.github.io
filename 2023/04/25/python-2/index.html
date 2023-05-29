@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>python -疫情下的女性相关话题讨论 | 云间晚晚</title><meta name="author" content="Wanwan"><meta name="copyright" content="Wanwan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="这个项目开放度比较高，只给了一个思路，即统计在聊到女性防疫人员这个话题的时候，媒体与群众讨论的高频关键词，无论是正面还是负面，没有给出限定的分析方法，经过我和马哥的讨论，决定像按照以下思路来做：  python爬取微博下某个话题相关的所有评论（马哥跑代码把飞浆GPU算力用完了还没跑完，乐） python进行数据清洗、中文分词、统计词频、绘制词云（已做好，等待马哥发来的数据） SPSS进行数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python -疫情下的女性相关话题讨论">
+<meta property="og:url" content="https://jerryc.me/2023/04/25/python-2/index.html">
+<meta property="og:site_name" content="云间晚晚">
+<meta property="og:description" content="这个项目开放度比较高，只给了一个思路，即统计在聊到女性防疫人员这个话题的时候，媒体与群众讨论的高频关键词，无论是正面还是负面，没有给出限定的分析方法，经过我和马哥的讨论，决定像按照以下思路来做：  python爬取微博下某个话题相关的所有评论（马哥跑代码把飞浆GPU算力用完了还没跑完，乐） python进行数据清洗、中文分词、统计词频、绘制词云（已做好，等待马哥发来的数据） SPSS进行数">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jerryc.me/img/wanwan3.jpg">
+<meta property="article:published_time" content="2023-04-25T11:18:32.000Z">
+<meta property="article:modified_time" content="2023-05-02T16:49:27.568Z">
+<meta property="article:author" content="Wanwan">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jerryc.me/img/wanwan3.jpg"><link rel="shortcut icon" href="/img/yy.png"><link rel="canonical" href="https://jerryc.me/2023/04/25/python-2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'python -疫情下的女性相关话题讨论',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-03 00:49:27'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/wanwan3.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/moon.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="云间晚晚"><span class="site-name">云间晚晚</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">python -疫情下的女性相关话题讨论</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-25T11:18:32.000Z" title="发表于 2023-04-25 19:18:32">2023-04-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-02T16:49:27.568Z" title="更新于 2023-05-03 00:49:27">2023-05-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="python -疫情下的女性相关话题讨论"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>这个项目开放度比较高，只给了一个思路，即统计在聊到女性防疫人员这个话题的时候，媒体与群众讨论的高频关键词，无论是正面还是负面，没有给出限定的分析方法，经过我和马哥的讨论，决定像按照以下思路来做：</p>
+<ol type="1">
+<li>python爬取微博下某个话题相关的所有评论（马哥跑代码把飞浆GPU算力用完了还没跑完，乐）</li>
+<li>python进行数据清洗、中文分词、统计词频、绘制词云（已做好，等待马哥发来的数据）</li>
+<li>SPSS进行数据分析，讨论相关性，另外我想加一些Tableau可视化，让结果更直观。（没做完，只有大体思路）</li>
+<li>数据分析报告。（大学这几年写了上百份实验报告谁懂啊）</li>
+</ol>
+<p>那么就分成以下四部分介绍：（未完待续）</p>
+<p>===============</p>
+<p>记录下5.3思路：今天又和马哥聊了聊，以及根据他和老板的对话，打算先筛数据，模糊匹配，找到带“女”以及相关的评论热搜之类的，然后统计词频，找相关关联，看了知乎的一篇帖子，有个网站很好用：https://www.zhihu.com/question/525225101/answer/2590352771 基本涵盖大部分需求了，功能还挺完备的(高级功能要加钱TuT)，所以最后打算实现词共现矩阵+关联关系。</p>
+<h3 id="python爬取微博数据">python爬取微博数据</h3>
+<h3 id="python数据处理">python数据处理</h3>
+<p>现在还没拿到跑到的数据，但是之前做过一部分尝试是直接爬取<strong>上热搜的话题</strong>，先拿这个数据举例子：</p>
+<h4 id="数据导入">数据导入</h4>
+<p>读取csv文件，简单清洗(没什么变化，数据集比较规范)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#加载训练集</span></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment">#导入两个csv文件</span></span><br><span class="line">train_dataset = pd.read_csv(<span class="string">&#x27;yiqing.csv&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数据集数量： %d&quot;</span>%train_dataset.duration.count())</span><br><span class="line">train_dataset.head(<span class="number">5</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#对测试集完全相同的数据进行删除</span></span><br><span class="line">train_dataset.drop_duplicates(inplace=<span class="literal">True</span>)</span><br><span class="line"><span class="comment">#删除含有缺失值的行</span></span><br><span class="line">train_dataset.dropna()</span><br><span class="line">train_dataset.duration.count()</span><br></pre></td></tr></table></figure>
+<h4 id="数据清洗">数据清洗</h4>
+<p>停用词、分词、只留下中文(我觉得在这个情况下只留下中文是比较合理的)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#数据清洗-去除中文以外的字符</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">worddrop</span>(<span class="params">a</span>):</span><br><span class="line">    drop=re.<span class="built_in">compile</span>(<span class="string">&#x27;[^\u4e00-\u9fa5]&#x27;</span>)</span><br><span class="line">    a=drop.sub(<span class="string">&#x27;&#x27;</span>,a)</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line">train_dataset.keywords=train_dataset.keywords.apply(worddrop)</span><br><span class="line">train_dataset.head()</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"><span class="comment">#导入停用词表</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">stopwordslist</span>(<span class="params">filepath</span>):</span><br><span class="line">    stopwords = [line.strip() <span class="keyword">for</span> line <span class="keyword">in</span> <span class="built_in">open</span>(filepath, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>).readlines()] </span><br><span class="line">                                                                                              </span><br><span class="line">    <span class="keyword">return</span> stopwords </span><br><span class="line">stopwords = stopwordslist(<span class="string">&#x27;stopword.txt&#x27;</span>)</span><br><span class="line">stopwords[:<span class="number">10</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除停用词</span></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line">start=time.clock()</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">del_stopword</span>(<span class="params">a</span>):</span><br><span class="line">    old = jieba.cut(a)</span><br><span class="line">    new = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> old :</span><br><span class="line">        <span class="keyword">if</span> word <span class="keyword">not</span> <span class="keyword">in</span> stopwords: </span><br><span class="line">                new += <span class="string">&quot; &quot;</span> </span><br><span class="line">                new += word </span><br><span class="line">    <span class="keyword">return</span> new</span><br><span class="line">train_dataset.keywords=train_dataset.keywords.apply(del_stopword)</span><br><span class="line">end=time.clock()</span><br><span class="line">train_dataset.head()</span><br></pre></td></tr></table></figure>
+<h4 id="存为文本">存为文本</h4>
+<p>处理完之后，把分出来得到的所有词都转变为文本，存到txt文件中，这里的规则是遇到空格即换行，方便词云绘制时候的读取数据。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将keywords列转换为文本</span></span><br><span class="line">keywords_text = train_dataset[<span class="string">&#x27;keywords&#x27;</span>].<span class="built_in">str</span>.replace(<span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;\n&#x27;</span>).<span class="built_in">str</span>.cat(sep=<span class="string">&#x27; &#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(keywords_text)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;keywords.txt&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(keywords_text)</span><br></pre></td></tr></table></figure>
+<h4 id="效果如下图"><img src="/2023/04/25/python-2/image-20230425193306923.png" alt="效果如下图："></h4>
+<h4 id="绘制词云">绘制词云</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> jieba  <span class="comment"># 分词</span></span><br><span class="line"><span class="keyword">from</span> wordcloud <span class="keyword">import</span> WordCloud  <span class="comment"># 词云图相关</span></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.colors <span class="keyword">as</span> colors  <span class="comment"># 处理图片相关内容</span></span><br><span class="line"><span class="keyword">import</span> numpy</span><br><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成词云</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_wcloud</span>():</span><br><span class="line">	<span class="comment"># 读取文本</span></span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;keywords.txt&#x27;</span>, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> txt:</span><br><span class="line">        data = txt.read()</span><br><span class="line">    <span class="comment"># 将文件中所有文字分词</span></span><br><span class="line">    words_list = jieba.lcut(data)</span><br><span class="line">    <span class="comment"># 用空格分隔词语</span></span><br><span class="line">    tokenstr = <span class="string">&#x27; &#x27;</span>.join(words_list)</span><br><span class="line">    <span class="comment"># 打开背景图片</span></span><br><span class="line">    color_mask = numpy.array(Image.<span class="built_in">open</span>(<span class="string">&#x27;yy5.png&#x27;</span>))</span><br><span class="line">    <span class="comment"># 自定义文字颜色</span></span><br><span class="line">    colormaps = colors.ListedColormap([<span class="string">&#x27;#6298c3&#x27;</span>,<span class="string">&#x27;#78bad4&#x27;</span>])</span><br><span class="line">    <span class="comment"># 生成词云（默认样式）</span></span><br><span class="line">    <span class="comment"># mywc1 = WordCloud().generate(tokenstr)</span></span><br><span class="line">    <span class="comment"># 生成词云（自定义样式）</span></span><br><span class="line">    mywc1 = WordCloud(</span><br><span class="line">        scale=<span class="number">4</span>,<span class="comment">#清晰度！</span></span><br><span class="line">        mask=color_mask,  <span class="comment"># 指定背景图形状</span></span><br><span class="line">        colormap=colormaps,  <span class="comment"># 指定颜色</span></span><br><span class="line">        font_path=<span class="string">&#x27;smallfont2.ttf&#x27;</span>,  <span class="comment"># 指定字体</span></span><br><span class="line">        background_color=<span class="string">&#x27;white&#x27;</span>,  <span class="comment"># 指定背景颜色，默认黑色</span></span><br><span class="line">        width=<span class="number">400</span>,  <span class="comment"># 指定宽度</span></span><br><span class="line">        height=<span class="number">600</span>  <span class="comment"># 指定高度</span></span><br><span class="line">    ).generate(tokenstr)</span><br><span class="line">    <span class="comment"># 显示词云</span></span><br><span class="line">    plt.figure(figsize=(<span class="number">16</span>, <span class="number">9</span>), dpi=<span class="number">300</span>)</span><br><span class="line">    plt.imshow(mywc1)</span><br><span class="line">    plt.axis(<span class="string">&#x27;off&#x27;</span>)</span><br><span class="line">    plt.show()</span><br><span class="line">    mywc1.to_file(<span class="string">&#x27;词云.png&#x27;</span>)  <span class="comment"># 生成词云图片</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    get_wcloud()</span><br></pre></td></tr></table></figure>
+<p>直接上效果图：</p>
+<p><img src="/2023/04/25/python-2/词云.png" style="zoom: 10%;"></p>
+<h3 id="spss数据分析">SPSS数据分析</h3>
+<h3 id="分析报告">分析报告</h3>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://jerryc.me">Wanwan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://jerryc.me/2023/04/25/python-2/">https://jerryc.me/2023/04/25/python-2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://jerryc.me" target="_blank">云间晚晚</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/python/">python</a></div><div class="post_share"><div class="social-share" data-image="/img/wanwan3.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/27/SQL-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" title="SQL -窗口函数"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">SQL -窗口函数</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/24/SQL-hard/" title="SQL -困难题"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SQL -困难题</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/04/24/python-news/" title="python -辨别真假新闻"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-24</div><div class="title">python -辨别真假新闻</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/wanwan3.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Wanwan</div><div class="author-info__description">日暮酒杯淡饭，一半一半.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Wanwan0407"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">dy:Wanwan还在睡梦中  不定期更新日常和蛋仔派对,欢迎来访︶ε╰✿  PS:本网站于4.24开始建设，有很多不足，日益完善中//</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#python%E7%88%AC%E5%8F%96%E5%BE%AE%E5%8D%9A%E6%95%B0%E6%8D%AE"><span class="toc-number">1.</span> <span class="toc-text">python爬取微博数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#python%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86"><span class="toc-number">2.</span> <span class="toc-text">python数据处理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AF%BC%E5%85%A5"><span class="toc-number">2.1.</span> <span class="toc-text">数据导入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97"><span class="toc-number">2.2.</span> <span class="toc-text">数据清洗</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%98%E4%B8%BA%E6%96%87%E6%9C%AC"><span class="toc-number">2.3.</span> <span class="toc-text">存为文本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%88%E6%9E%9C%E5%A6%82%E4%B8%8B%E5%9B%BE"><span class="toc-number">2.4.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BB%98%E5%88%B6%E8%AF%8D%E4%BA%91"><span class="toc-number">2.5.</span> <span class="toc-text">绘制词云</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spss%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">SPSS数据分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%9E%90%E6%8A%A5%E5%91%8A"><span class="toc-number">4.</span> <span class="toc-text">分析报告</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/29/C-UDP/" title="C++ -CLIENT-SERVER通信协议">C++ -CLIENT-SERVER通信协议</a><time datetime="2023-05-29T11:21:03.000Z" title="发表于 2023-05-29 19:21:03">2023-05-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/27/SQL-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" title="SQL -窗口函数">SQL -窗口函数</a><time datetime="2023-04-27T11:29:26.000Z" title="发表于 2023-04-27 19:29:26">2023-04-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/25/python-2/" title="python -疫情下的女性相关话题讨论">python -疫情下的女性相关话题讨论</a><time datetime="2023-04-25T11:18:32.000Z" title="发表于 2023-04-25 19:18:32">2023-04-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/SQL-hard/" title="SQL -困难题">SQL -困难题</a><time datetime="2023-04-24T14:16:43.000Z" title="发表于 2023-04-24 22:16:43">2023-04-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/python-news/" title="python -辨别真假新闻">python -辨别真假新闻</a><time datetime="2023-04-24T09:36:17.000Z" title="发表于 2023-04-24 17:36:17">2023-04-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Wanwan</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这个底部蓝色背景图怎么改啊有没有人帮帮我QAQ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

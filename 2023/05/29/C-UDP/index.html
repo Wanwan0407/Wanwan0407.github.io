@@ -1,0 +1,237 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++ -CLIENT-SERVER通信协议 | 云间晚晚</title><meta name="author" content="Wanwan"><meta name="copyright" content="Wanwan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="具有最少安全功能的CLIENT-SERVER通信协议 实验要求 实现一个简单的 UDP 客户端-服务器应用程序，在客户端使用密码成功登录后，服务器将文件传输到客户端。 要求：您必须在两个不同的文件中实现两段代码: 客户端和服务器。下面是协议规范，它将为您提供实现这两个程序所害的详细信息。此外，我们还提供了数据包格式，它指定了客户端和服务器将交换的消息的内容。即使客户端和服务器运行在具有不同">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ -CLIENT-SERVER通信协议">
+<meta property="og:url" content="https://jerryc.me/2023/05/29/C-UDP/index.html">
+<meta property="og:site_name" content="云间晚晚">
+<meta property="og:description" content="具有最少安全功能的CLIENT-SERVER通信协议 实验要求 实现一个简单的 UDP 客户端-服务器应用程序，在客户端使用密码成功登录后，服务器将文件传输到客户端。 要求：您必须在两个不同的文件中实现两段代码: 客户端和服务器。下面是协议规范，它将为您提供实现这两个程序所害的详细信息。此外，我们还提供了数据包格式，它指定了客户端和服务器将交换的消息的内容。即使客户端和服务器运行在具有不同">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jerryc.me/img/wanwan3.jpg">
+<meta property="article:published_time" content="2023-05-29T11:21:03.000Z">
+<meta property="article:modified_time" content="2023-05-29T11:33:08.339Z">
+<meta property="article:author" content="Wanwan">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jerryc.me/img/wanwan3.jpg"><link rel="shortcut icon" href="/img/yy.png"><link rel="canonical" href="https://jerryc.me/2023/05/29/C-UDP/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++ -CLIENT-SERVER通信协议',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-29 19:33:08'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/wanwan3.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/moon.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="云间晚晚"><span class="site-name">云间晚晚</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">C++ -CLIENT-SERVER通信协议</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-05-29T11:21:03.000Z" title="发表于 2023-05-29 19:21:03">2023-05-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-29T11:33:08.339Z" title="更新于 2023-05-29 19:33:08">2023-05-29</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="C++ -CLIENT-SERVER通信协议"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="具有最少安全功能的client-server通信协议">具有最少安全功能的CLIENT-SERVER通信协议</h3>
+<h4 id="实验要求">实验要求</h4>
+<p>实现一个简单的 UDP 客户端-服务器应用程序，在客户端使用密码成功登录后，服务器将文件传输到客户端。</p>
+<p>要求：您必须在两个不同的文件中实现两段代码: 客户端和服务器。下面是协议规范，它将为您提供实现这两个程序所害的详细信息。此外，我们还提供了数据包格式，它指定了客户端和服务器将交换的消息的内容。即使客户端和服务器运行在具有不同 endian 格式的体系结构上，您的实现也必须正确工作。</p>
+<p><strong>协议规范:</strong></p>
+<ol type="1">
+<li>客户端发送JOIN REQ 分组以发起与服务器的通信。</li>
+<li>服务器以 PASS REQ 数据包进行响应，该数据包是对用户的密码请求。</li>
+<li>客户端将向服务器发送 PASS RESP 包，其中包括密码。</li>
+<li>服条器将验证密码，如果密码正确，服务器将向客户端发送 PASS ACCEPT 数据包。</li>
+<li>如果密码不正确，服务器将再次向客户端发送 PASS REQ 包。PASS REQ 数据包将最多重发三次。第三次之后,服务器向客户端发送拒绝消息。客户端关闭会话,服务器也退出。</li>
+<li>一旦服务器向客户端发送 PASS ACCEPT 包，服务器就开始使用 DATA 包发送文件。文件被分成几个段(取决于文件的大小)，每个段都使用 DATA 数据包传输。</li>
+<li>当服务器完成发送文件时，它将发送一个 TERMINATE 数据包，该数据标志着文件下载的结束。此数据包中包含一个文件摘要 (SHA1 摘要) ，客户端将使用它来验证接收到的文件的完整性。</li>
+</ol>
+<h4 id="背景知识">背景知识</h4>
+<p>UDP（UserDatagramProtocol）是一个简单的面向消息的传输层协议，它不保证向上层协议提供消息传递，并且UDP层在发送后不会保留UDP 消息的状态。因此，UDP被称为不可靠的数据报协议。</p>
+<p>UDP的优点：简单，轻量化。</p>
+<p>UDP的缺点：没有流控制，没有应答确认机制，不能解决丢包、重发、错序问题。</p>
+<h4 id="亮点">亮点</h4>
+<ol type="1">
+<li>本次实验实现了从数据库中读取密码，使得客户端和服务器准确连接。</li>
+<li>实验里修改了数据包结构，让整体实验更加清晰。</li>
+</ol>
+<h4 id="udp通讯部分">UDP通讯部分</h4>
+<h5 id="整体流程">整体流程</h5>
+<figure>
+<img src="/2023/05/29/C-UDP/image-20230529193144651.png" alt="用draw.io画的流程图"><figcaption aria-hidden="true">用draw.io画的流程图</figcaption>
+</figure>
+<p>整个过程：Server端首先建立连接，然后</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://jerryc.me">Wanwan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://jerryc.me/2023/05/29/C-UDP/">https://jerryc.me/2023/05/29/C-UDP/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://jerryc.me" target="_blank">云间晚晚</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a></div><div class="post_share"><div class="social-share" data-image="/img/wanwan3.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/04/27/SQL-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" title="SQL -窗口函数"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">SQL -窗口函数</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/wanwan3.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Wanwan</div><div class="author-info__description">日暮酒杯淡饭，一半一半.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Wanwan0407"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">dy:Wanwan还在睡梦中  不定期更新日常和蛋仔派对,欢迎来访︶ε╰✿  PS:本网站于4.24开始建设，有很多不足，日益完善中//</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B7%E6%9C%89%E6%9C%80%E5%B0%91%E5%AE%89%E5%85%A8%E5%8A%9F%E8%83%BD%E7%9A%84client-server%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.</span> <span class="toc-text">具有最少安全功能的CLIENT-SERVER通信协议</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9E%E9%AA%8C%E8%A6%81%E6%B1%82"><span class="toc-number">1.1.</span> <span class="toc-text">实验要求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.</span> <span class="toc-text">背景知识</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%AE%E7%82%B9"><span class="toc-number">1.3.</span> <span class="toc-text">亮点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#udp%E9%80%9A%E8%AE%AF%E9%83%A8%E5%88%86"><span class="toc-number">1.4.</span> <span class="toc-text">UDP通讯部分</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">1.4.1.</span> <span class="toc-text">整体流程</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/29/C-UDP/" title="C++ -CLIENT-SERVER通信协议">C++ -CLIENT-SERVER通信协议</a><time datetime="2023-05-29T11:21:03.000Z" title="发表于 2023-05-29 19:21:03">2023-05-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/27/SQL-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" title="SQL -窗口函数">SQL -窗口函数</a><time datetime="2023-04-27T11:29:26.000Z" title="发表于 2023-04-27 19:29:26">2023-04-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/25/python-2/" title="python -疫情下的女性相关话题讨论">python -疫情下的女性相关话题讨论</a><time datetime="2023-04-25T11:18:32.000Z" title="发表于 2023-04-25 19:18:32">2023-04-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/SQL-hard/" title="SQL -困难题">SQL -困难题</a><time datetime="2023-04-24T14:16:43.000Z" title="发表于 2023-04-24 22:16:43">2023-04-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/python-news/" title="python -辨别真假新闻">python -辨别真假新闻</a><time datetime="2023-04-24T09:36:17.000Z" title="发表于 2023-04-24 17:36:17">2023-04-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Wanwan</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这个底部蓝色背景图怎么改啊有没有人帮帮我QAQ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

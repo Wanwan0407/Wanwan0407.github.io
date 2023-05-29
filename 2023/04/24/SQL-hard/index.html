@@ -1,0 +1,893 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="dark"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>SQL -困难题 | 云间晚晚</title><meta name="author" content="Wanwan"><meta name="copyright" content="Wanwan"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#0d0d0d"><meta name="description" content="SQL困难题(牛客)：本篇博客记录牛客种SQL题的困难题的一些解题思路，会给出解题代码和关键细节，以及使用navicat中运行的结果，不直接用牛客的自测结果是因为没有给出列名，看着很混乱() SQL134 满足条件的用户的试卷完成数和题目练习数 通过率13.07% 题目：用户信息表user_info（uid用户ID，nick_name昵称, achievement成就值, level等级, j">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL -困难题">
+<meta property="og:url" content="https://jerryc.me/2023/04/24/SQL-hard/index.html">
+<meta property="og:site_name" content="云间晚晚">
+<meta property="og:description" content="SQL困难题(牛客)：本篇博客记录牛客种SQL题的困难题的一些解题思路，会给出解题代码和关键细节，以及使用navicat中运行的结果，不直接用牛客的自测结果是因为没有给出列名，看着很混乱() SQL134 满足条件的用户的试卷完成数和题目练习数 通过率13.07% 题目：用户信息表user_info（uid用户ID，nick_name昵称, achievement成就值, level等级, j">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://jerryc.me/img/wanwan3.jpg">
+<meta property="article:published_time" content="2023-04-24T14:16:43.000Z">
+<meta property="article:modified_time" content="2023-05-02T17:11:29.889Z">
+<meta property="article:author" content="Wanwan">
+<meta property="article:tag" content="sql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://jerryc.me/img/wanwan3.jpg"><link rel="shortcut icon" href="/img/yy.png"><link rel="canonical" href="https://jerryc.me/2023/04/24/SQL-hard/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  }
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'SQL -困难题',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-05-03 01:11:29'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 5.4.2"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/wanwan3.jpg" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('/img/moon.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="云间晚晚"><span class="site-name">云间晚晚</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">SQL -困难题</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2023-04-24T14:16:43.000Z" title="发表于 2023-04-24 22:16:43">2023-04-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2023-05-02T17:11:29.889Z" title="更新于 2023-05-03 01:11:29">2023-05-03</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="SQL -困难题"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p><strong>SQL困难题(牛客)：</strong>本篇博客记录牛客种SQL题的困难题的一些解题思路，会给出解题代码和关键细节，以及使用navicat中运行的结果，不直接用牛客的自测结果是因为没有给出列名，看着很混乱()</p>
+<h3 id="sql134-满足条件的用户的试卷完成数和题目练习数-通过率13.07"><strong>SQL134</strong> 满足条件的用户的试卷完成数和题目练习数 通过率13.07%</h3>
+<p>题目：用户信息表user_info（uid用户ID，nick_name昵称, achievement成就值, level等级, job职业方向, register_time注册时间）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>uid</th>
+<th>nick_name</th>
+<th>achievement</th>
+<th>level</th>
+<th>job</th>
+<th>register_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1001</td>
+<td>牛客1号</td>
+<td>3100</td>
+<td>7</td>
+<td>算法</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1002</td>
+<td>牛客2号</td>
+<td>2300</td>
+<td>7</td>
+<td>算法</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>1003</td>
+<td>牛客3号</td>
+<td>2500</td>
+<td>7</td>
+<td>算法</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>1004</td>
+<td>牛客4号</td>
+<td>1200</td>
+<td>5</td>
+<td>算法</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>1005</td>
+<td>牛客5号</td>
+<td>1600</td>
+<td>6</td>
+<td>C++</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>1006</td>
+<td>牛客6号</td>
+<td>2000</td>
+<td>6</td>
+<td>C++</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+</tbody>
+</table>
+<p>试卷信息表examination_info（exam_id试卷ID, tag试卷类别, difficulty试卷难度, duration考试时长, release_time发布时间）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>exam_id</th>
+<th>tag</th>
+<th>difficulty</th>
+<th>duration</th>
+<th>release_time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>9001</td>
+<td>SQL</td>
+<td>hard</td>
+<td>60</td>
+<td>2021-09-01 06:00:00</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>9002</td>
+<td>C++</td>
+<td>hard</td>
+<td>60</td>
+<td>2021-09-01 06:00:00</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>9003</td>
+<td>算法</td>
+<td>medium</td>
+<td>80</td>
+<td>2021-09-01 10:00:00</td>
+</tr>
+</tbody>
+</table>
+<p>试卷作答记录表exam_record（uid用户ID, exam_id试卷ID, start_time开始作答时间, submit_time交卷时间, score得分）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>uid</th>
+<th>exam_id</th>
+<th>start_time</th>
+<th>submit_time</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1001</td>
+<td>9001</td>
+<td>2021-09-01 09:01:01</td>
+<td>2021-09-01 09:31:00</td>
+<td>81</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1002</td>
+<td>9002</td>
+<td>2021-09-01 12:01:01</td>
+<td>2021-09-01 12:31:01</td>
+<td>81</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>1003</td>
+<td>9001</td>
+<td>2021-09-01 19:01:01</td>
+<td>2021-09-01 19:40:01</td>
+<td>86</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>1003</td>
+<td>9002</td>
+<td>2021-09-01 12:01:01</td>
+<td>2021-09-01 12:31:51</td>
+<td>89</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>1004</td>
+<td>9001</td>
+<td>2021-09-01 19:01:01</td>
+<td>2021-09-01 19:30:01</td>
+<td>85</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>1005</td>
+<td>9002</td>
+<td>2021-09-01 12:01:01</td>
+<td>2021-09-01 12:31:02</td>
+<td>85</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>1006</td>
+<td>9003</td>
+<td>2021-09-07 10:01:01</td>
+<td>2021-09-07 10:21:01</td>
+<td>84</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>1006</td>
+<td>9001</td>
+<td>2021-09-07 10:01:01</td>
+<td>2021-09-07 10:21:01</td>
+<td>80</td>
+</tr>
+</tbody>
+</table>
+<p>题目练习记录表practice_record（uid用户ID, question_id题目ID, submit_time提交时间, score得分）：</p>
+<table>
+<thead>
+<tr class="header">
+<th>id</th>
+<th>uid</th>
+<th>question_id</th>
+<th>submit_time</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1001</td>
+<td>8001</td>
+<td>2021-08-02 11:41:01</td>
+<td>60</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1002</td>
+<td>8001</td>
+<td>2021-09-02 19:30:01</td>
+<td>50</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>1002</td>
+<td>8001</td>
+<td>2021-09-02 19:20:01</td>
+<td>70</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>1002</td>
+<td>8002</td>
+<td>2021-09-02 19:38:01</td>
+<td>70</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>1004</td>
+<td>8001</td>
+<td>2021-08-02 19:38:01</td>
+<td>70</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>1004</td>
+<td>8002</td>
+<td>2021-08-02 19:48:01</td>
+<td>90</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>1001</td>
+<td>8002</td>
+<td>2021-08-02 19:38:01</td>
+<td>70</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>1004</td>
+<td>8002</td>
+<td>2021-08-02 19:48:01</td>
+<td>90</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>1004</td>
+<td>8002</td>
+<td>2021-08-02 19:58:01</td>
+<td>94</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>1004</td>
+<td>8003</td>
+<td>2021-08-02 19:38:01</td>
+<td>70</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>1004</td>
+<td>8003</td>
+<td>2021-08-02 19:48:01</td>
+<td>90</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>1004</td>
+<td>8003</td>
+<td>2021-08-01 19:38:01</td>
+<td>80</td>
+</tr>
+</tbody>
+</table>
+<p>请你找到<strong>高难度SQL</strong>试卷得分<strong>平均值大于80</strong>并且是<strong>7级</strong>的红名大佬，统计他们的<strong>2021年试卷总完成次数</strong>和<strong>题目总练习次数</strong>，只保留<strong>2021年</strong>有试卷完成记录的用户。结果按<strong>试卷完成数升序</strong>，按<strong>题目练习数降序</strong>。</p>
+<p>题解：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">	uid,</span><br><span class="line">	<span class="built_in">count</span>( <span class="keyword">DISTINCT</span> exam_id ) exam_cnt,</span><br><span class="line">	<span class="built_in">count</span>( <span class="keyword">DISTINCT</span> practice_record.submit_time ) question_cnt </span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">	exam_record</span><br><span class="line">	<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> practice_record <span class="keyword">USING</span> ( uid ) </span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">	uid <span class="keyword">IN</span> (</span><br><span class="line">	<span class="keyword">SELECT</span></span><br><span class="line">		uid </span><br><span class="line">	<span class="keyword">FROM</span></span><br><span class="line">		exam_record</span><br><span class="line">		<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> ( examination_info ) <span class="keyword">USING</span> ( exam_id )</span><br><span class="line">		<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> user_info <span class="keyword">USING</span> ( uid ) </span><br><span class="line">	<span class="keyword">WHERE</span></span><br><span class="line">		difficulty <span class="operator">=</span> &quot;hard&quot; </span><br><span class="line">		<span class="keyword">AND</span> LEVEL <span class="operator">=</span> <span class="number">7</span> </span><br><span class="line">		<span class="keyword">AND</span> <span class="keyword">YEAR</span> ( submit_time )<span class="operator">=</span> <span class="number">2021</span> </span><br><span class="line">		<span class="keyword">AND</span> tag <span class="operator">=</span> &quot;SQL&quot; </span><br><span class="line">	<span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">		uid </span><br><span class="line">	<span class="keyword">HAVING</span></span><br><span class="line">		<span class="built_in">avg</span>( score ) <span class="operator">&gt;</span> <span class="number">80</span> ) </span><br><span class="line">	<span class="keyword">AND</span> ( <span class="keyword">YEAR</span> ( practice_record.submit_time )<span class="operator">=</span> <span class="number">2021</span> <span class="keyword">OR</span> <span class="keyword">YEAR</span> ( practice_record.submit_time ) <span class="keyword">IS</span> <span class="keyword">NULL</span> ) </span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> uid </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span></span><br><span class="line">	exam_cnt <span class="keyword">ASC</span>,</span><br><span class="line">	question_cnt <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+<p>好麻烦的题，全看考虑地周不周到，而且自测给的例子很少，每次自测通过之后提交又不对真是让人心寒ToT，大体思路就是多表联合、分组聚合，条件筛选，说说其中需要注意的点：</p>
+<ol type="1">
+<li><strong>高难度SQL</strong>试卷得分<strong>平均值大于80</strong>并且是<strong>7级</strong>：四个条件很容易遗漏，我找大佬的时候没注意SQL这个tag，应是多找出来一个大佬，但是这个问题很容易查出来。</li>
+<li><strong>2021年试卷总完成次数</strong>和<strong>题目总练习次数</strong>：这个条件真妙，自测里一点坑涉及不到，最后保存提交的结果乱七八糟(单押skr~)，我一开始完成的思路是<strong>试卷练习表左连接题目练习表</strong>，最后count的时候给试卷加上distinct，就可以正确统计出试卷联系数量，直接count(*)就可以统计出题目练习数量，但是问题没有那么简单，里面涉及两个坑：<strong>1.符合大佬条件的人可能没有练习过题目</strong> <strong>2.一个题目可能被练习过多次</strong>(因为求的是题目总练习次数不是练习题目的数量)，所以修改条件如下：首先筛选出2021年的题目和题目列为null的题目，count()时统计提交时间，即可完美解决。</li>
+</ol>
+<p>结果：</p>
+<p><img src="/2023/04/24/SQL-hard/image-20230426155240419.png" alt="image-20230426155240419" style="zoom:50%;"></p>
+<h3 id="sql206-获取每个部门中当前员工薪水最高的相关信息-通过率19.87"><strong>SQL206</strong> <strong>获取每个部门中当前员工薪水最高的相关信息</strong> 通过率:19.87%</h3>
+<p>题目：dept_emp表：</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>dept_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>d001</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>d001</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="odd">
+<td>10003</td>
+<td>d002</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>salaries表:</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>salary</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>88958</td>
+<td>2002-06-22</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>72527</td>
+<td>2001-08-02</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="odd">
+<td>10003</td>
+<td>92527</td>
+<td>2001-08-02</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>获取每个部门中当前员工薪水最高的相关信息，给出dept_no, emp_no以及其对应的salary，按照部门编号dept_no升序排列。</p>
+<p>题解：</p>
+<p>直接窗口函数，子表rank()排名，主表加上rank()列的条件=1（因为SQL会首先执行where的条件，所以不能直接在原表中=1）</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    dept_no,</span><br><span class="line">    emp_no,</span><br><span class="line">    salary</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">    (</span><br><span class="line">        <span class="keyword">SELECT</span></span><br><span class="line">            dept_no,</span><br><span class="line">            emp_no,</span><br><span class="line">            <span class="built_in">rank</span>() <span class="keyword">over</span> (</span><br><span class="line">                <span class="keyword">PARTITION</span> <span class="keyword">by</span> dept_no</span><br><span class="line">                <span class="keyword">order</span> <span class="keyword">by</span> salary <span class="keyword">desc</span></span><br><span class="line">                        ) <span class="keyword">as</span> maxSalary_rank,</span><br><span class="line">            salary</span><br><span class="line">        <span class="keyword">from</span></span><br><span class="line">            dept_emp <span class="keyword">join</span> salaries <span class="keyword">using</span> (emp_no)</span><br><span class="line">    ) t</span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">    maxSalary_rank <span class="operator">=</span> <span class="number">1</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> dept_no <span class="keyword">asc</span>;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="/2023/04/24/SQL-hard/image-20230424222628355.png" alt="image-20230424222628355" style="zoom:50%;"></p>
+<h4 id="窗口-排序函数">窗口-排序函数</h4>
+<p>顺便记录一下窗口函数里的排序函数：</p>
+<table>
+<thead>
+<tr class="header">
+<th>函数名</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>row_number()</td>
+<td>顺序排序</td>
+</tr>
+<tr class="even">
+<td>rank()</td>
+<td>并列排序，1，1，3</td>
+</tr>
+<tr class="odd">
+<td>dense_rank()</td>
+<td>并列排序，稠密，1，1，2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sql215-查找在职员工自入职以来的薪水涨幅情况-通过率22.07"><strong>SQL215</strong> <strong>查找在职员工自入职以来的薪水涨幅情况</strong> 通过率：22.07%</h3>
+<p>题目：员工表employees简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>birth_date</th>
+<th>first_name</th>
+<th>last_name</th>
+<th>gender</th>
+<th>hire_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>1953-09-02</td>
+<td>Georgi</td>
+<td>Facello</td>
+<td>M</td>
+<td>2001-06-22</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>1964-06-02</td>
+<td>Bezalel</td>
+<td>Simmel</td>
+<td>F</td>
+<td>1999-08-03</td>
+</tr>
+</tbody>
+</table>
+<p>薪水表salaries简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>salary</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>85097</td>
+<td>2001-06-22</td>
+<td>2002-06-22</td>
+</tr>
+<tr class="even">
+<td>10001</td>
+<td>88958</td>
+<td>2002-06-22</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="odd">
+<td>10002</td>
+<td>72527</td>
+<td>1999-08-03</td>
+<td>2000-08-02</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>72527</td>
+<td>2000-08-02</td>
+<td>2001-08-02</td>
+</tr>
+</tbody>
+</table>
+<p>请你查找在职员工自入职以来的薪水涨幅情况，给出在职员工编号emp_no以及其对应的薪水涨幅growth，并按照growth进行升序，以上例子输出为：</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>growth</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>3861</td>
+</tr>
+</tbody>
+</table>
+<p>（注: to_date为薪资调整某个结束日期，或者为离职日期，to_date='9999-01-01'时，表示依然在职，无后续调整记录）</p>
+<p>题解：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    emp,</span><br><span class="line">    now_salary <span class="operator">-</span> hire_salary <span class="keyword">as</span> growth</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">    (</span><br><span class="line">        <span class="keyword">SELECT</span> <span class="keyword">distinct</span></span><br><span class="line">            emp,</span><br><span class="line">            hire_date,</span><br><span class="line">            hire_salary,</span><br><span class="line">            now_date,</span><br><span class="line">            s.salary <span class="keyword">as</span> now_salary</span><br><span class="line">        <span class="keyword">from</span></span><br><span class="line">            (</span><br><span class="line">                <span class="keyword">SELECT</span></span><br><span class="line">                    employees.emp_no <span class="keyword">AS</span> emp,</span><br><span class="line">                    hire_date,</span><br><span class="line">                    salary <span class="keyword">AS</span> hire_salary</span><br><span class="line">                <span class="keyword">FROM</span></span><br><span class="line">                    employees <span class="keyword">JOIN</span> salaries <span class="keyword">ON</span> (hire_date <span class="operator">=</span> from_date)</span><br><span class="line">            ) t</span><br><span class="line">            <span class="keyword">left</span> <span class="keyword">join</span> (</span><br><span class="line">                <span class="keyword">SELECT</span></span><br><span class="line">                    emp_no <span class="keyword">as</span> emp,</span><br><span class="line">                    <span class="built_in">max</span>(<span class="type">date</span> (to_date)) <span class="keyword">as</span> now_date</span><br><span class="line">                <span class="keyword">from</span></span><br><span class="line">                    salaries</span><br><span class="line">                <span class="keyword">GROUP</span> <span class="keyword">BY</span></span><br><span class="line">                    emp_no</span><br><span class="line">            ) t2 <span class="keyword">using</span> (emp)</span><br><span class="line">            <span class="keyword">join</span> salaries s <span class="keyword">on</span> emp <span class="operator">=</span> s.emp_no <span class="keyword">and</span> s.to_date <span class="operator">=</span> t2.now_date)</span><br><span class="line">    ) t3</span><br><span class="line"><span class="keyword">where</span></span><br><span class="line">    now_date <span class="operator">=</span> &quot;9999-01-01&quot;</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span></span><br><span class="line">    growth;</span><br></pre></td></tr></table></figure>
+<p>我的解题思路大概是这样的：</p>
+<ol type="1">
+<li><p>首先肯定要把当前的工资和入职的工资放入一个表里，我的方案是借助employees表当作跳板(因为第二张表虽然有全部的信息，但是找到入职时间不如第一张表方便)，找到t(员工号,雇佣日期，当前工资)。</p></li>
+<li><p>接着t2表找到salaries里找到to_date里最大的，也就是这个员工在公司的最晚日期，如果9999-1-1说明还在公司。</p></li>
+<li><p>接着t3表将t和t2 join起来后，再join salaries表根据to_date找到当前工资，这样就把所有需要的数据整合在了一个表中，t3表长这样：</p>
+<p><img src="/2023/04/24/SQL-hard/image-20230428220743464.png" alt="image-20230428220743464" style="zoom:50%;"></p></li>
+<li><p>之后就好办很多，直接两数相减，再根据题目要求添加where条件，即可得到结果。</p></li>
+</ol>
+<p>结果：</p>
+<p><img src="/2023/04/24/SQL-hard/image-20230428215141354.png" alt="image-20230428215141354" style="zoom:50%;"></p>
+<p>后话：之后看了别人的代码，觉得自己写得好麻烦好麻烦好麻烦</p>
+<h3 id="sql219-获取员工其当前的薪水比其manager当前薪水还高的相关信息-通过率30.82"><strong>SQL219</strong> <strong>获取员工其当前的薪水比其manager当前薪水还高的相关信息</strong> 通过率：30.82%</h3>
+<p>题目：部门关系表dept_emp简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>dept_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>d001</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>d001</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>部门经理表dept_manager简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>dept_no</th>
+<th>emp_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>d001</td>
+<td>10002</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>薪水表salaries简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>salary</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>88958</td>
+<td>2002-06-22</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>72527</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>要求<strong>获取员工其当前的薪水比其manager当前薪水还高的相关信息</strong>，</p>
+<p>第一列给出员工的emp_no， 第二列给出其manager的manager_no， 第三列给出该员工当前的薪水emp_salary, 第四列给该员工对应的manager当前的薪水manager_salary</p>
+<p>题解：多表联合+筛选，首先聚合三张表，获取到所有信息，然后对员工号进行筛选，感觉不难。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">	emp,</span><br><span class="line">	manager_no,</span><br><span class="line">	emp_salary,</span><br><span class="line">	s2.salary <span class="keyword">AS</span> manager_salary </span><br><span class="line"><span class="keyword">FROM</span></span><br><span class="line">	(</span><br><span class="line">	<span class="keyword">SELECT</span></span><br><span class="line">		de.emp_no <span class="keyword">AS</span> emp,</span><br><span class="line">		de.dept_no <span class="keyword">AS</span> dep,</span><br><span class="line">		dm.emp_no <span class="keyword">AS</span> manager_no,</span><br><span class="line">		s.salary <span class="keyword">AS</span> emp_salary </span><br><span class="line">	<span class="keyword">FROM</span></span><br><span class="line">		dept_emp de</span><br><span class="line">		<span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept_manager dm <span class="keyword">USING</span> ( dept_no )</span><br><span class="line">	<span class="keyword">JOIN</span> salaries s <span class="keyword">ON</span> ( de.emp_no <span class="operator">=</span> s.emp_no )) t</span><br><span class="line">	<span class="keyword">JOIN</span> salaries s2 <span class="keyword">ON</span> ( t.manager_no <span class="operator">=</span> s2.emp_no ) </span><br><span class="line"><span class="keyword">WHERE</span></span><br><span class="line">	emp <span class="operator">!=</span> manager_no </span><br><span class="line">	<span class="keyword">AND</span> emp_salary <span class="operator">&gt;</span> s2.salary;</span><br></pre></td></tr></table></figure>
+<p>结果：</p>
+<p><img src="/2023/04/24/SQL-hard/image-20230425090609615.png" alt="image-20230425090609615" style="zoom:50%;"></p>
+<p>每日一吹属性名as成新的属性名，清晰又好看！</p>
+<h3 id="sql220-汇总各个部门当前员工的title类型的分配数目-通过率27.60"><strong>SQL220</strong> <strong>汇总各个部门当前员工的title类型的分配数目 通过率：27.60%</strong></h3>
+<p>部门表departments简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>dept_no</th>
+<th>dept_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>d001</td>
+<td>Marketing</td>
+</tr>
+<tr class="even">
+<td>d002</td>
+<td>Finance</td>
+</tr>
+</tbody>
+</table>
+<p>部门员工关系表dept_emp简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>dept_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>d001</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>d001</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="odd">
+<td>10003</td>
+<td>d002</td>
+<td>1995-12-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>职称表titles简况如下:</p>
+<table>
+<thead>
+<tr class="header">
+<th>emp_no</th>
+<th>title</th>
+<th>form_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10001</td>
+<td>Senior Engineer</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="even">
+<td>10002</td>
+<td>Staff</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+<tr class="odd">
+<td>10003</td>
+<td>Senior Engineer</td>
+<td>1995-12-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>汇总各个部门当前员工的title类型的分配数目，即结果给出部门编号dept_no、dept_name、其部门下所有的员工的title以及该类型title对应的数目count，结果按照dept_no升序排序，dept_no一样的再按title升序排序</p>
+<table>
+<thead>
+<tr class="header">
+<th>dept_no</th>
+<th>dept_name</th>
+<th>title</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>d001</td>
+<td>Marketing</td>
+<td>Senior Engineer</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>d001</td>
+<td>Marketing</td>
+<td>Staff</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>d002</td>
+<td>Finance</td>
+<td>Senior Engineer</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>题解：</p>
+<p>这题我认为不至于在困难里，就简单的表连接，然后还有诡异难理解的题目，其余没什么难的。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span></span><br><span class="line">    dept_no,</span><br><span class="line">    dept_name,</span><br><span class="line">    title,</span><br><span class="line">    <span class="built_in">count</span>(<span class="operator">*</span>)</span><br><span class="line"><span class="keyword">from</span></span><br><span class="line">    (</span><br><span class="line">        <span class="keyword">select</span></span><br><span class="line">            dept_no,</span><br><span class="line">            dept_name,</span><br><span class="line">            title,</span><br><span class="line">            emp_no</span><br><span class="line">        <span class="keyword">from</span></span><br><span class="line">            departments</span><br><span class="line">            <span class="keyword">left</span> <span class="keyword">join</span> dept_emp <span class="keyword">using</span> (dept_no)</span><br><span class="line">            <span class="keyword">left</span> <span class="keyword">join</span> titles <span class="keyword">using</span> (emp_no)</span><br><span class="line">    ) t</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span></span><br><span class="line">    dept_no,</span><br><span class="line">    title</span><br><span class="line"><span class="keyword">order</span> <span class="keyword">by</span></span><br><span class="line">    dept_no,</span><br><span class="line">    title;</span><br></pre></td></tr></table></figure>
+<p>趁此回忆一下表连接：</p>
+<h4 id="表连接">表连接</h4>
+<p>INNER JOIN:内连接,关键字在表中存在至少一个匹配时返回行。 left join : 左连接，返回左表中所有的记录以及右表中连接字段相等的记录。 right join : 右连接，返回右表中所有的记录以及左表中连接字段相等的记录。 inner join : 内连接，又叫等值连接，只返回两个表中连接字段相等的行。 full join : 外连接，返回两个表中的行：left join + right join。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="https://jerryc.me">Wanwan</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://jerryc.me/2023/04/24/SQL-hard/">https://jerryc.me/2023/04/24/SQL-hard/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://jerryc.me" target="_blank">云间晚晚</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/sql/">sql</a></div><div class="post_share"><div class="social-share" data-image="/img/wanwan3.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/04/25/python-2/" title="python -疫情下的女性相关话题讨论"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">python -疫情下的女性相关话题讨论</div></div></a></div><div class="next-post pull-right"><a href="/2023/04/24/python-news/" title="python -辨别真假新闻"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">python -辨别真假新闻</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2023/04/27/SQL-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" title="SQL -窗口函数"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-27</div><div class="title">SQL -窗口函数</div></div></a></div><div><a href="/2023/04/18/wandir/" title="SQL -基础"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-04-18</div><div class="title">SQL -基础</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/wanwan3.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Wanwan</div><div class="author-info__description">日暮酒杯淡饭，一半一半.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">7</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Wanwan0407"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">dy:Wanwan还在睡梦中  不定期更新日常和蛋仔派对,欢迎来访︶ε╰✿  PS:本网站于4.24开始建设，有很多不足，日益完善中//</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#sql134-%E6%BB%A1%E8%B6%B3%E6%9D%A1%E4%BB%B6%E7%9A%84%E7%94%A8%E6%88%B7%E7%9A%84%E8%AF%95%E5%8D%B7%E5%AE%8C%E6%88%90%E6%95%B0%E5%92%8C%E9%A2%98%E7%9B%AE%E7%BB%83%E4%B9%A0%E6%95%B0-%E9%80%9A%E8%BF%87%E7%8E%8713.07"><span class="toc-number">1.</span> <span class="toc-text">SQL134 满足条件的用户的试卷完成数和题目练习数 通过率13.07%</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql206-%E8%8E%B7%E5%8F%96%E6%AF%8F%E4%B8%AA%E9%83%A8%E9%97%A8%E4%B8%AD%E5%BD%93%E5%89%8D%E5%91%98%E5%B7%A5%E8%96%AA%E6%B0%B4%E6%9C%80%E9%AB%98%E7%9A%84%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF-%E9%80%9A%E8%BF%87%E7%8E%8719.87"><span class="toc-number">2.</span> <span class="toc-text">SQL206 获取每个部门中当前员工薪水最高的相关信息 通过率:19.87%</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%AA%97%E5%8F%A3-%E6%8E%92%E5%BA%8F%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">窗口-排序函数</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql215-%E6%9F%A5%E6%89%BE%E5%9C%A8%E8%81%8C%E5%91%98%E5%B7%A5%E8%87%AA%E5%85%A5%E8%81%8C%E4%BB%A5%E6%9D%A5%E7%9A%84%E8%96%AA%E6%B0%B4%E6%B6%A8%E5%B9%85%E6%83%85%E5%86%B5-%E9%80%9A%E8%BF%87%E7%8E%8722.07"><span class="toc-number">3.</span> <span class="toc-text">SQL215 查找在职员工自入职以来的薪水涨幅情况 通过率：22.07%</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql219-%E8%8E%B7%E5%8F%96%E5%91%98%E5%B7%A5%E5%85%B6%E5%BD%93%E5%89%8D%E7%9A%84%E8%96%AA%E6%B0%B4%E6%AF%94%E5%85%B6manager%E5%BD%93%E5%89%8D%E8%96%AA%E6%B0%B4%E8%BF%98%E9%AB%98%E7%9A%84%E7%9B%B8%E5%85%B3%E4%BF%A1%E6%81%AF-%E9%80%9A%E8%BF%87%E7%8E%8730.82"><span class="toc-number">4.</span> <span class="toc-text">SQL219 获取员工其当前的薪水比其manager当前薪水还高的相关信息 通过率：30.82%</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sql220-%E6%B1%87%E6%80%BB%E5%90%84%E4%B8%AA%E9%83%A8%E9%97%A8%E5%BD%93%E5%89%8D%E5%91%98%E5%B7%A5%E7%9A%84title%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%88%86%E9%85%8D%E6%95%B0%E7%9B%AE-%E9%80%9A%E8%BF%87%E7%8E%8727.60"><span class="toc-number">5.</span> <span class="toc-text">SQL220 汇总各个部门当前员工的title类型的分配数目 通过率：27.60%</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E8%BF%9E%E6%8E%A5"><span class="toc-number">5.1.</span> <span class="toc-text">表连接</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/05/29/C-UDP/" title="C++ -CLIENT-SERVER通信协议">C++ -CLIENT-SERVER通信协议</a><time datetime="2023-05-29T11:21:03.000Z" title="发表于 2023-05-29 19:21:03">2023-05-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/27/SQL-%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0/" title="SQL -窗口函数">SQL -窗口函数</a><time datetime="2023-04-27T11:29:26.000Z" title="发表于 2023-04-27 19:29:26">2023-04-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/25/python-2/" title="python -疫情下的女性相关话题讨论">python -疫情下的女性相关话题讨论</a><time datetime="2023-04-25T11:18:32.000Z" title="发表于 2023-04-25 19:18:32">2023-04-25</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/SQL-hard/" title="SQL -困难题">SQL -困难题</a><time datetime="2023-04-24T14:16:43.000Z" title="发表于 2023-04-24 22:16:43">2023-04-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/04/24/python-news/" title="python -辨别真假新闻">python -辨别真假新闻</a><time datetime="2023-04-24T09:36:17.000Z" title="发表于 2023-04-24 17:36:17">2023-04-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Wanwan</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">这个底部蓝色背景图怎么改啊有没有人帮帮我QAQ</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>if (!window.MathJax) {
+  window.MathJax = {
+    tex: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"]],
+      tags: 'ams'
+    },
+    chtml: {
+      scale: 1.1
+    },
+    options: {
+      renderActions: {
+        findScript: [10, doc => {
+          for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+            const display = !!node.type.match(/; *mode=display/)
+            const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+            const text = document.createTextNode('')
+            node.parentNode.replaceChild(text, node)
+            math.start = {node: text, delim: '', n: 0}
+            math.end = {node: text, delim: '', n: 0}
+            doc.math.push(math)
+          }
+        }, ''],
+        insertScript: [200, () => {
+          document.querySelectorAll('mjx-container').forEach(node => {
+            if (node.hasAttribute('display')) {
+              btf.wrap(node, 'div', { class: 'mathjax-overflow' })
+            } else {
+              btf.wrap(node, 'span', { class: 'mathjax-overflow' })
+            }
+          });
+        }, '', false]
+      }
+    }
+  }
+  
+  const script = document.createElement('script')
+  script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+  script.id = 'MathJax-script'
+  script.async = true
+  document.head.appendChild(script)
+} else {
+  MathJax.startup.document.state(0)
+  MathJax.texReset()
+  MathJax.typesetPromise()
+}</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
